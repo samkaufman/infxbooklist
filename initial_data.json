@@ -1,0 +1,47 @@
+[
+	{"model": "booklistapp.categorytype",
+	 "pk": 1,
+	 "fields": {"description": "Subject"}
+	},
+	{"model": "booklistapp.category",
+	 "pk": 1,
+	 "fields": {"name": "Programming and Software Development",
+	            "slug": "programming",
+				"category_type": 1}
+	},
+	{"model": "booklistapp.category",
+	 "pk": 2,
+	 "fields": {"name": "Social Impact of Computing",
+	            "slug": "social",
+				"category_type": 1}
+	},
+	{"model": "booklistapp.category",
+	 "pk": 3,
+	 "fields": {"name": "History and Development of Computing",
+	            "slug": "history",
+				"category_type": 1}
+	},
+	
+	{"model": "booklistapp.categorytype",
+	 "pk": 2,
+	 "fields": {"description": "Suitability"}
+	},
+	{"model": "booklistapp.category",
+	 "pk": 4,
+	 "fields": {"name": "Incoming Freshman",
+	            "slug": "freshmen",
+				"category_type": 2}
+	},
+	{"model": "booklistapp.category",
+	 "pk": 5,
+	 "fields": {"name": "Undergraduates",
+	            "slug": "undergrads",
+				"category_type": 2}
+	},
+	{"model": "booklistapp.category",
+	 "pk": 6,
+	 "fields": {"name": "Graduate Students",
+	            "slug": "grads",
+				"category_type": 2}
+	}
+]

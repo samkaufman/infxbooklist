@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+	<title>Edit - Informatics Book List</title>
+	<link rel="stylesheet" href="/static/base.css" type="text/css" charset="utf-8" />
+	<style type="text/css">
+		body {
+			width: 30em;
+			font-family: sans-serif;
+		}
+		p {
+			font-size: small;
+		}
+	</style>
+</head>
+<body>
+	<h1>Informatics Book List: Edit</h1>
+	
+	<h2>Add New Book</h2>
+	<p class='help'>Search for a book you would like to add and/or comment upon. The Amazon.com books database will be used. Then, optionally, add a public comment to the book. If the book has already	been recommended, your comment will be appended, and the book will remain on the public list until you and all other editors retract their recommendation.</p>
+	<form action="addbook" method="get" accept-charset="utf-8">
+		<p><input type="text" name="keywords" value="" id="keywords" style="font-size: large" />
+			<input type="submit" value="Search" style="font-size: xx-large">
+		</p>
+	</form>
+	<ul>
+		{% for r in results %}
+		<form action="addbook" method="post" accept-charset="utf-8">
+		<input type="hidden" name="asin" value="{{r.asin}}" id="asin">
+		<li>{{r.title}} by {{r.authors}} <input type="submit" value="Add Book"></li>
+		</form>
+		{% endfor %}
+	</ul>
+	
+	<h2>Your Recommendations and Comments</h2>
+	{% if not recs %}
+	<p>None, yet. Add some, above.</p>
+	{% else %}
+	{{ recs }}
+	{% endif %}
+</body>
+</html>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>{{ page_title }}{%if page_title%}, {%endif%}Informatics Book List</title>
+	<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+	<style type="text/css" media="screen">
+		html, body {
+			padding: 0 0 0 0;
+			margin: 0 0 0 0;
+			background-color: #fbfbfb;
+			font: normal normal normal 0.8125em/normal Verdana, sans-serif;
+		}
+		#header {
+			background-color: #1b1a41;
+			font-family: Georgia, serif;
+			font-size: 12pt;
+			padding-top: 1.6em;
+			padding-bottom: 1.6em;
+			text-transform: lowercase;
+			color: white;
+			text-align: center;
+		}
+		h1 {
+			font-weight: normal;
+			margin-bottom: 0;
+			font-style: italic;
+		}
+		#header p {
+			font-family: Georgia, serif;
+			color: #aaa;
+			font-size: 9.22pt;
+		}
+		#header a {
+			text-decoration: none;
+			color: #aaa;
+		}
+		#header a:hover {
+			text-decoration: underline;
+			color: #aaa;
+		}
+		#container {
+			width: 720px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		#container div {
+			margin-top: 10px;
+			margin-bottom: 1em;
+		}
+		#mainbar {
+			width: 540px;
+			vertical-align: top;
+			float: left;
+		}
+		#sidebar {
+			width: 180px;
+			float: right;
+			vertical-align: top;
+		}
+		#sidebar h2 {
+			font-size: 100%;
+			font-weight: bold;
+		}
+		#sidebar ul {
+			list-style: none;
+			padding-left: 0.4em;
+		}
+		#sidebar ul li {
+			margin-bottom: 0.3em;
+		}
+		.selected {
+			background: #ff6;
+		}
+		.bookthumb {
+			float: left;
+			margin-bottom: 10px;
+		}
+		.book p {
+			{% if complete_view %}
+			margin-left: 60px;
+			{% endif %}
+		}
+		.book {
+			clear: both;
+		}
+		.bookcomment, .recommendations  {
+			padding-left: 1em;
+		}
+		.title {
+			font-family: Georgia, serif;
+			font-size: 12pt;
+			margin-bottom: 0;
+		}
+		.author {
+			font-family: Verdana, sans-serif;
+			margin-top: 0.23em;
+		}
+		a {
+			color: #02a;
+		}
+		a:active {
+			color: #82a;
+		}
+		a:visited {
+			color: #82a;
+		}
+		#footer {
+			clear: both;
+			margin-top: 3em;
+			border-top: 1px solid black;
+			width: 75%;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+		}
+		#footer p {
+			margin: 0.3em;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="header">
+		<h1 style="">Infx Booklist</h1>
+		<p><a href="http://ics.uci.edu/informatics">Dept. of Informatics</a><br/>
+		<a href="http://ics.uci.edu">Donald Bren School of Information and Computer Sciences</a><br/>
+		<a href="http://uci.edu">University of California, Irvine</a></p>
+	</div>
+	<div id="container">
+		<div id="mainbar">
+			<!-- no-book placeholder -->
+			{% if not book_list %}
+				<p>This category is empty! If you're an editor, <a href="/edit/">add</a> a book.</p>
+			{% endif %}
+			<!-- books -->
+			{% for book in book_list %}
+				<div class="book">
+					{% if complete_view %}
+						{% if book.cover_image %}
+							<img src="/{{ book.cover_image }}" style="max-width:51px; max-height:90px" class="bookthumb"/>
+						{% endif %}
+					{% endif %}
+					<p class="title"><a href="{{book.url}}" class="booktitle">{{ book.title }}</a></p>
+					<p class="author">by {{ book.authors }}</p>
+					{% if complete_view %}
+						{% with book.get_comments as comments %}
+							{% for c in comments %}
+							<p class="bookcomment">
+								<a href="#">{{ c.user.ucinetid }}</a>: <q>{{ c.comment }}</q>
+							</p>
+							{% endfor %}
+							{% with book.get_silent_recommendations as sil_recs %}
+								{% if sil_recs %}
+									<p class="recommendations">{%if comments%}Also r{%else%}R{%endif%}ecommended by {% for r in sil_recs %}{%if forloop.last %}&nbsp;and&nbsp;{%else%}{%if not forloop.first%},&nbsp;{%endif%}{%endif%}<a href="#">{{ r.user.ucinetid }}</a>{% endfor %}.</p>
+								{% endif %}
+							{% endwith %}
+						{% endwith %}
+					{% endif %}
+				</div>
+			{% endfor %}
+			<!-- paginator -->
+			{% if has_previous or has_next %}
+			<br /><center>
+			<span class="lbottom">
+			{% if has_previous %}<a href="{{ path }}?page={{ previous }}"><< Previous </a>{% else %}<span>Previous </span>{% endif %}
+			{% if show_first %}<a href="{{ path }}?page=1">First </a>{% endif %}
+			{% for page_no in page_numbers %}
+			    {% ifnotequal page_no page %}
+			        <a href="{{ path }}?page={{ page_no }}">{{ page_no }} </a>
+			    {% else %}
+			    {{ page_no }} 
+			    {% endifnotequal %}
+			{% endfor %}
+			{% if show_last %}<a href="{{ path }}?page={{ pages }}">Last </a>{% endif %}
+			{% if has_next %}<a href="{{ path }}?page={{ next }}">Next >></a>{% else %}<span>Next </span>{% endif %}
+			</span>
+			<br /></center>
+			{%endif%}
+		</div>
+		<div id="sidebar"> 
+			<p style="font-weight: bold">{% if current_slug %}<a href="/">All Books</a>{% else %}<span class="selected">All Books</span>{% endif %}</p> 
+			<div>
+				{% for ct in category_types %}
+					<h2>{{ct.description}}</h2>
+					<ul>
+					{% for c in ct.get_categories %}
+						{% ifequal c.slug current_slug %}<li class="selected">{{c.name}}</li>{% endifequal %}{% ifnotequal c.slug current_slug %}<li><a href="/{{c.slug}}/">{{c.name}}</a></li>{% endifnotequal %}
+					{% endfor %}
+					</ul>
+				{% endfor %}
+			</div>
+			<p style="margin-top: 2.1em">
+				{% if complete_view %}
+				<a href="?view=simple">Simple View</a> / <span class="selected">Complete View<span>
+				{% else %}
+				<span class="selected">Simple View</span> / <a href="?view=complete">Complete View</a>
+				{% endif %}
+			</p>
+			<div id="improveform"> 
+				<h2 id="improveformprompt" style="margin-top: 20px; margin-bottom:0; padding-bottom:0">What can we improve?</h2>
+				<textarea id="feedbacktext" style="width:100%; margin-top: 0" onfocus="javascript:if ($('#feedbacktext').text()==$('#feedbacktext').val()) {$('#feedbacktext').text('');}; $('#sendbutton').show()">Tell us here.</textarea>
+				<button style="margin:0; display:none" id="sendbutton" onclick="javascript:$.post('/feedback',{text: $('#feedbacktext').val()}, function(data){$('#feedbacktext').val(''); $('#improveformprompt').text('Thanks! Anything else?'); $('#feedbacktext').text('Feel free to add more, here.'); $('#sendbutton').hide()});">Send Feedback</button> 
+			</div> 
+		</div>
+	</div>
+	<div id="footer"> 
+		<p>Faculty, please <a href="/edit/">edit</a>. Or if you run this ship, <a href="/admin/">administrate</a>.</p> 
+		<p>&copy;2010 Sam Kaufman.</p> 
+	</div>
+</body>
+</html>

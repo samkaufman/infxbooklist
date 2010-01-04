@@ -1,0 +1,125 @@
+{% load paginator %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+	<title>{{ page_title }}{%if page_title%}, {%endif%}Informatics Book List</title>
+	<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+	<link rel="stylesheet" href="/static/base.css" type="text/css" charset="utf-8" />
+	{% if not complete_view %}
+	<link rel="stylesheet" href="/static/simpleview.css" type="text/css" charset="utf-8" />
+	{% endif %}
+</head>
+<body>
+	<h1><a href="/">Informatics Book List</a></h1>
+	<div class="subh1">Donald Bren School of Informatics and Computer Science</div>
+	<div class="subh1">University of California, Irvine</div>
+	<h2>{{ page_title }}</h2>
+	<div id="sidebar">
+		<p>
+			{% if complete_view %}
+			<a href="?view=simple">Simple View</a> / <b>Complete View</b>
+			{% else %}
+			<b>Simple View</b> / <a href="?view=complete">Complete View</a>
+			{% endif %}
+		</p>
+		<!--
+			
+			Search
+			
+			<form action="search" method="get" accept-charset="utf-8">
+			<p>
+				<input type="input" name="query" value="Prof., title or author" id="query" style="width:60%" />
+				<input type="submit" value="Search" style="width: 30%"/>
+			</p>
+		</form>-->
+		<p>
+			<a href="/">Show All Books</a>
+		</p>
+		<p>
+			Show books pertaining to:
+			<ul>
+				<li><a href="/programming/">programming and software development</a></li>
+				<li><a href="/social/">the social impact of computing</a></li>
+				<li><a href="/history/">history and development of computing</a></li>
+			</ul>
+		</p>
+		<p>
+			Show books suitable for:
+			<ul>
+				<li><a href="/incoming/">incoming freshmen</a></li>
+				<li><a href="/undergrads/">undergrads.</a></li>
+				<li><a href="/newgrads/">incoming grad. students</a></li>
+			</ul>
+		</p>
+		<div id="improveform">
+			<p>
+				<b id="improveformprompt" style="font-size: small">What can we improve?</b><br/>
+				<!--<textarea id="feedbacktext" style="width:100%" onfocus="javascript:if ($('#feedbacktext').text()==$('#feedbacktext').val()) {$('#feedbacktext').select();}">Tell us here.</textarea>-->
+				<textarea id="feedbacktext" style="width:100%"></textarea>
+				<button style="margin:0;" onclick="javascript:$.post('/feedback',{text: $('#feedbacktext').val()}, function(data){$('#feedbacktext').val(''); $('#improveformprompt').text('Thanks! Anything else?')});">Send Feedback</button>
+			</p>
+		</div>
+	</div>
+	<ul class="booklist">
+		{% if not book_list %}
+			<p>No books, yet! If you're an editor, '<a href="/edit/">add</a> one.</p>
+		{% endif %}
+		{% for book in book_list %}
+		<li>
+			{% if complete_view %}
+				{% if book.cover_image %}
+					<img src="/{{ book.cover_image }}" style="max-width:51px; max-height:90px" class="bookthumb"/>
+				{% endif %}
+			{% endif %}
+			<div class="bookcontent">
+				<p class="title"><a href="{{book.url}}" class="booktitle">{{ book.title }}</a></p>
+				<p class="author">by {{ book.authors }}</p>
+				{% if complete_view %}
+					{% with book.get_comments as comments %}
+						{% for c in comments %}
+						<p class="bookcomment">
+							<a href="#">{{ c.user.ucinetid }}</a>: <q>{{ c.comment }}</q>
+						</p>
+						{% endfor %}
+						{% with book.get_silent_recommendations as sil_recs %}
+							{% if sil_recs %}
+								<p class="recommendations">{%if comments%}Also r{%else%}R{%endif%}ecommended by
+									{% for r in sil_recs %}
+										<a href="#">{{ r.user.ucinetid }}</a>{%if forloop.last %}&nbsp;and&nbsp;{%else%},&nbsp;{%endif%}
+									{% endfor %}
+								.</p>
+							{% endif %}
+						{% endwith %}
+					{% endwith %}
+				{% endif %}
+			</div>
+		</li>
+		{% endfor %}
+		
+		<!-- paginator -->
+		{% if has_previous or has_next %}
+		<br /><center>
+		<span class="lbottom">
+		{% if has_previous %}<a href="{{ path }}?page={{ previous }}"><< Previous </a>{% else %}<span>Previous </span>{% endif %}
+		{% if show_first %}<a href="{{ path }}?page=1">First </a>{% endif %}
+		{% for page_no in page_numbers %}
+		    {% ifnotequal page_no page %}
+		        <a href="{{ path }}?page={{ page_no }}">{{ page_no }} </a>
+		    {% else %}
+		    {{ page_no }} 
+		    {% endifnotequal %}
+		{% endfor %}
+		{% if show_last %}<a href="{{ path }}?page={{ pages }}">Last </a>{% endif %}
+		{% if has_next %}<a href="{{ path }}?page={{ next }}">Next >></a>{% else %}<span>Next </span>{% endif %}
+		</span>
+		<br /></center>
+		{%endif%}
+		
+	</ul>
+	
+	<div id="footer">
+		<p>Faculty, please <a href="/edit/">edit</a>. Or if you run this ship, <a href="/admin/">administrate</a>.</p>
+		<p>&copy;2008 Sam Kaufman.</p>
+	</div>
+</html>
