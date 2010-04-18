@@ -8,8 +8,8 @@ from booklistapp.models import Book
 
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
-    (r'^feedback', 'booklist.booklistapp.views.feedback'),
-    (r'^edit', 'booklist.booklistapp.views.edit'),
+    (r'^feedback', 'infxbooklist.booklistapp.views.feedback'),
+    (r'^edit', 'infxbooklist.booklistapp.views.edit'),
 )
 
 if settings.DEBUG:
@@ -23,5 +23,5 @@ if settings.DEBUG:
     )
     
 urlpatterns += patterns('',
-    (r'^(?P<category>.*)', 'booklist.booklistapp.views.index'),
+    (r'^(?P<category>.*)', 'infxbooklist.booklistapp.views.index'),
 )
