@@ -459,7 +459,7 @@ class DjangoBackend:
                     user.last_name = ldap_user.sn.title()
                     user.email = ldap_user.mail
                 user.is_staff = False
-                user.is_superuser = False
+                user.is_superuser = webauth_user.ucinetid in ('kaufmans', 'kay')
                 user.save()
             return user
 
