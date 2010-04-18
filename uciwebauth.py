@@ -459,7 +459,7 @@ class DjangoBackend:
                     user.last_name = ldap_user.sn.title()
                     user.email = ldap_user.mail
                 user.is_staff = False
-                user.is_superuser = webauth_user.ucinetid in ('kaufmans', 'kay')
+                user.is_superuser = False
                 user.save()
             return user
 
@@ -470,6 +470,12 @@ class DjangoBackend:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
+            
+    def has_perm(self, user_obj, perm):
+        if user_obj.username in ('kaufmans', 'kay'):
+            return True
+        else:
+            return False
 
 
 class CgiBackend(object):
