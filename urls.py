@@ -8,8 +8,9 @@ from booklistapp.models import Book
 
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
-    (r'^feedback', 'infxbooklist.booklistapp.views.feedback'),
-    (r'^edit', 'infxbooklist.booklistapp.views.edit'),
+    (r'^feedback/$', 'infxbooklist.booklistapp.views.feedback'),
+    (r'^edit/$', 'infxbooklist.booklistapp.views.edit'),
+    (r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
 )
 
 if settings.DEBUG:

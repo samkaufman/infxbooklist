@@ -1,12 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.paginator import Paginator
+from django.contrib.auth.views import redirect_to_login
 from django.views.generic.list_detail import object_list
 from models import Book, Category, CategoryType, FeedbackNote, Recommendation, User
 from settings import AMAZON_KEY, DEBUG
 from booklistapp.utils import english_list
 from urllib import urlencode
-import ecs, datetime, webauth
+import ecs, datetime
 
 def index(request, category):
     # Simple or Complete view
@@ -44,21 +45,10 @@ def edit(request):
     context = {}
     
     #
-    # WebAuth/UCInetID Login.
-    # Creates a User from UCInetID if
-    # necessary.
+    # Require login.
     #
-    ucinetid = webauth.logged_in(request, return_id=True)
-    if ucinetid == False:
-        if DEBUG:
-            print dir(request)
-        return HttpResponseRedirect("https://login.uci.edu/ucinetid/webauth?" +
-                                    urlencode({'return_url':'http://'+request.get_host()+request.get_full_path()}))
-    else:
-        user = User.objects.get(ucinetid=ucinetid)
-        if user == None:
-            user = User(ucinetid=ucinetid)
-            user.save()
+    if not (request.user.is_authenticated()):
+        return redirect_to_login(request.build_absolute_uri())
     
     #
     # Adding books
@@ -84,7 +74,7 @@ def edit(request):
     #
     # User's recommendations and contacts
     #
-    context['recs'] = Recommendation.objects.filter(user=user)
+    context['recs'] = Recommendation.objects.filter(user=request.user)
 
     # Go.
     return render_to_response('edit.html', context)

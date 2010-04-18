@@ -66,9 +66,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'infxbooklist.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
     '/Users/emrys/Code/infxbooklist/templates'
 )
 
@@ -81,3 +78,13 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'infxbooklist.booklistapp'
 )
+
+LOGIN_URL = "/login/"
+
+# If there is a local_settings module,
+# it should be allowed to override the
+# above. This is for clean deployment.
+try:
+    from local_settings import *
+except ImportError:
+    pass
