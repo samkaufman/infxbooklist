@@ -9,12 +9,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'booklist'  # Or path to database file if using sqlite3.
-DATABASE_USER = 'booklist'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'elektric7'         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_ENGINE = 'sqlite3'     # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = 'booklist.db'   # Or path to database file if using sqlite3.
+DATABASE_USER = 'booklist'      # Not used with sqlite3.
+DATABASE_PASSWORD = 'elektric7' # Not used with sqlite3.
+DATABASE_HOST = ''              # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_PORT = ''              # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -48,7 +48,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '-bgt35&!q3(3sz384+zo@=oeqw*!06c1*$j32q-0%$bco_t^p('
+SECRET_KEY = '-bgt35&!q3(3sz384+zo@=oeqw*!06c1*$j32q-1%$bco_t^p('
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
