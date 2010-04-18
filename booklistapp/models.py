@@ -66,7 +66,7 @@ class Book(models.Model):
     
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    slug = models.CharField(max_length=50)
+    slug = models.CharField(max_length=50, unique=True)
     books = models.ManyToManyField(Book, null=True, blank=True)
     category_type = models.ForeignKey('CategoryType')
     class Meta:

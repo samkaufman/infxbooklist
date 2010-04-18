@@ -48,7 +48,7 @@ def edit(request):
     # Require login.
     #
     if not (request.user.is_authenticated()):
-        return redirect_to_login(request.build_absolute_uri())
+        return redirect_to_login(request.build_absolute_uri()[7:])
     
     #
     # Adding books
