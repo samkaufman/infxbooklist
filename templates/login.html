@@ -1,19 +1,92 @@
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
-<form method="post" action="{% url django.contrib.auth.views.login %}">
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>{{ page_title }}{%if page_title%}, {%endif%}Informatics Book List</title>
+	<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+	<style type="text/css" media="screen">
+		html, body {
+			padding: 0 0 0 0;
+			margin: 0 0 0 0;
+			border-top: solid 10px #1b1a41;
+			background-color: #fbfbfb;
+			font: normal normal normal 0.8125em/normal Verdana, sans-serif;
+		}
+		h1 {
+			font-family: Georgia, serif;
+			font-size: 14pt;
+			padding-top: 1.6em;
+			padding-bottom: 1.6em;
+			text-transform: lowercase;
+			text-align: center;
+			font-weight: normal;
+			font-style: italic;
+		}
+		.centralform {
+			margin-left: auto;
+			margin-right: auto;
+			width: 30em;
+			margin-bottom: 60px;
+		}
+		a {
+			color: #02a;
+		}
+		a:active {
+			color: #82a;
+		}
+		a:visited {
+			color: #82a;
+		}
+		#footer {
+			clear: both;
+			margin-top: 3em;
+			border-top: 1px solid black;
+			width: 75%;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+		}
+		#footer p {
+			margin: 0.3em;
+		}
+	</style>
+	<script type="text/javascript" charset="utf-8">
+		function formfocus() {
+			document.getElementById('id_username').focus();
+		}
+		window.onload = formfocus;
+	</script>
+</head>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
+<body>
+
+	{% if form.errors %}
+	<p>Your username and password didn't match. Please try again.</p>
+	{% endif %}
+
+	<h1>Login with Your UCInetID</h1>
+	<form class="centralform" method="post" action="{% url django.contrib.auth.views.login %}">
+		<table>
+			<tr>
+			    <td>UCInetID</td>
+			    <td>{{ form.username }}</td>
+			</tr>
+			<tr>
+			    <td>{{ form.password.label_tag }}</td>
+			    <td>{{ form.password }}</td>
+			</tr>
+		</table>
+
+		<input type="submit" value="Login" />
+		<input type="hidden" name="next" value="{{ next }}" />
+	</form>
+	
+	<div id="footer"> 
+		<p>Faculty, please <a href="/edit/">edit</a>. Or if you run this ship, <a href="/admin/">administrate</a>.</p> 
+		<p>&copy;2010 Sam Kaufman.</p> 
+	</div>
+	
+</body>
+</html>
