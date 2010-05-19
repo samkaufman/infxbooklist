@@ -27,11 +27,11 @@
 	<table>
 		{% for r in results %}
 		<tr>
-			{% if r.thumbnail_url %}
 			<td>
+				{% if r.thumbnail_url %}
 				<img src="{{ r.thumbnail_url }}" />
+				{% endif %}
 			</td>
-			{% endif %}
 			<td><a href="{{ r.link }}">{{ r.title }}</a></td>
 			<td>{{ r.authors }}</td>
 			<td>

@@ -38,7 +38,7 @@ def get_books(query):
         else:
             isbn = None
             print >>sys.stderr, 'No ISBN found'
-        title = e.find('{http://www.w3.org/2005/Atom}title')
+        title = e.findtext('{http://www.w3.org/2005/Atom}title')
         author_list = [x.text for x in e.findall('{http://purl.org/dc/terms}creator')]
         authors = utils.english_list(author_list)
         img_links = [c for c in e.findall('{http://www.w3.org/2005/Atom}link')
