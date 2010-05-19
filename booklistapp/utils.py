@@ -5,4 +5,3 @@ def english_list(l,the_and="&"):
         return l[0]
     else:
         return ', '.join(l[:-1])+' '+the_and+' '+l[-1]
-        

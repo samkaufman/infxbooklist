@@ -24,14 +24,24 @@
 			<input type="submit" value="Search" style="font-size: xx-large">
 		</p>
 	</form>
-	<ul>
+	<table>
 		{% for r in results %}
-		<form action="/edit" method="post" accept-charset="utf-8">
-		<input type="hidden" name="asin" value="{{r.asin}}" id="asin">
-		<li>{{r.title}} by {{r.authors}} <input type="submit" value="Add Book"></li>
-		</form>
+		<tr>
+			{% if r.thumbnail_url %}
+			<td>
+				<img src="{{ r.thumbnail_url }}" />
+			</td>
+			{% endif %}
+			<td><a href="{{ r.link }}">{{ r.title }}</a></td>
+			<td>{{ r.authors }}</td>
+			<td>
+				<form action="/addbook" method="post" accept-charset="utf-8">
+					<input type="submit" value="Add Book" />
+				</form>
+			</td>
+		</tr>
 		{% endfor %}
-	</ul>
+	</table>
 	
 	<h2>Your Recommendations and Comments</h2>
 	{% if not recs %}
