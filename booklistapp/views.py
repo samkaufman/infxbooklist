@@ -8,6 +8,7 @@ from settings import AMAZON_KEY, DEBUG
 from booklistapp.utils import english_list
 from urllib import urlencode
 import ecs, datetime
+import gbooks
 
 def index(request, category):
     # Simple or Complete view
@@ -55,17 +56,18 @@ def edit(request):
     #
     if 'keywords' in request.GET:
         results = []
-        books = ecs.ItemSearch(AWSAccessKeyId=AMAZON_KEY, ResponseGroup="Small", SearchIndex="Books", Keywords=request.GET['keywords'])
-        for i,b in zip(xrange(10),books):
-            x = Book()
-            x.title = b.Title
-            try:
-                x.authors = english_list(b.Author)
-            except:
-                pass
-            x.asin = b.ASIN
-            results.append(x)
-        context['results'] = results
+        books = gbooks.get_books(request.GET['keywords'])
+        #for i,b in zip(xrange(10),books):
+        #    x = Book()
+        #    x.title = b.Title
+        #    try:
+        #        x.authors = english_list(b.Author)
+        #    except:
+        #        pass
+        #    x.asin = b.ASIN
+        #    results.append(x)
+        #context['results'] = results
+        context['results'] = books
     elif 'asin' in request.POST:
         b = Book(asin=request.POST['asin'], added=datetime.datetime.now())
         b.update_from_amazon()
