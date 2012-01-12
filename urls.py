@@ -4,8 +4,6 @@ import settings
 from django.contrib import admin
 admin.autodiscover()
 
-from booklistapp.models import Book
-
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^feedback/$', 'infxbooklist.booklistapp.views.feedback'),
@@ -24,5 +22,5 @@ if settings.DEBUG:
     )
     
 urlpatterns += patterns('',
-    (r'^(?P<category>.*)/', 'infxbooklist.booklistapp.views.index'),
+    (r'^((?P<category>.*)/$|$)', 'infxbooklist.booklistapp.views.index'),
 )

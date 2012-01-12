@@ -24,6 +24,7 @@
 			text-align: center;
 		}
 		h1 {
+			color: white;
 			font-weight: normal;
 			margin-bottom: 0;
 			font-style: italic;
@@ -139,22 +140,20 @@
 			{% for book in book_list %}
 				<div class="book">
 					{% if complete_view %}
-						{% if book.cover_image %}
-							<img src="/{{ book.cover_image }}" style="max-width:51px; max-height:90px" class="bookthumb"/>
-						{% endif %}
+						{% if book.cover_image %}<img src="/covers/{{ book.cover_image }}" style="max-width:51px; max-height:90px" class="bookthumb"/>{% endif %}
 					{% endif %}
-					<p class="title"><a href="{{book.url}}" class="booktitle">{{ book.title }}</a></p>
+					<p class="title"><a href="{{ book.url }}" class="booktitle">{{ book.title }}</a></p>
 					<p class="author">by {{ book.authors }}</p>
 					{% if complete_view %}
 						{% with book.get_comments as comments %}
 							{% for c in comments %}
 							<p class="bookcomment">
-								<a href="#">{{ c.user.ucinetid }}</a>: <q>{{ c.comment }}</q>
+								<strong>{{ c.user }}</strong>:&nbsp;{{ c.comment }}
 							</p>
 							{% endfor %}
 							{% with book.get_silent_recommendations as sil_recs %}
 								{% if sil_recs %}
-									<p class="recommendations">{%if comments%}Also r{%else%}R{%endif%}ecommended by {% for r in sil_recs %}{%if forloop.last %}&nbsp;and&nbsp;{%else%}{%if not forloop.first%},&nbsp;{%endif%}{%endif%}<a href="#">{{ r.user.ucinetid }}</a>{% endfor %}.</p>
+									<p class="recommendations">{%if comments%}Also r{%else%}R{%endif%}ecommended by {% for r in sil_recs %}{%if forloop.last and not forloop.first %}&nbsp;and&nbsp;{%else%}{%if not forloop.first%},&nbsp;{%endif%}{%endif%}<strong>{{ r.user }}</strong>{% endfor %}.</p>
 								{% endif %}
 							{% endwith %}
 						{% endwith %}
@@ -165,17 +164,18 @@
 			{% if has_previous or has_next %}
 			<br /><center>
 			<span class="lbottom">
-			{% if has_previous %}<a href="{{ path }}?page={{ previous }}"><< Previous </a>{% else %}<span>Previous </span>{% endif %}
-			{% if show_first %}<a href="{{ path }}?page=1">First </a>{% endif %}
-			{% for page_no in page_numbers %}
-			    {% ifnotequal page_no page %}
-			        <a href="{{ path }}?page={{ page_no }}">{{ page_no }} </a>
-			    {% else %}
-			    {{ page_no }} 
-			    {% endifnotequal %}
-			{% endfor %}
-			{% if show_last %}<a href="{{ path }}?page={{ pages }}">Last </a>{% endif %}
-			{% if has_next %}<a href="{{ path }}?page={{ next }}">Next >></a>{% else %}<span>Next </span>{% endif %}
+				{% if has_previous %}<a href="{{ path }}?page={{ previous }}"><< Previous</a>&nbsp;{% else %}<span>Previous</span>&nbsp;{% endif %}
+				{% if show_first %}<a href="{{ path }}?page=1">First </a>{% endif %}
+				&nbsp;&nbsp;&nbsp;
+				{% for page_no in page_numbers %}
+				    {% ifnotequal page_no page %}
+				        <a href="{{ path }}?page={{ page_no }}">{{ page_no }} </a>
+				    {% else %}
+				    {{ page_no }} 
+				    {% endifnotequal %}
+				{% endfor %}
+				{% if show_last %}<a href="{{ path }}?page={{ pages }}">Last </a>{% endif %}
+				{% if has_next %}<a href="{{ path }}?page={{ next }}">Next >></a>{% else %}<span>Next </span>{% endif %}
 			</span>
 			<br /></center>
 			{%endif%}
@@ -202,7 +202,7 @@
 			<div id="improveform"> 
 				<h2 id="improveformprompt" style="margin-top: 20px; margin-bottom:0; padding-bottom:0">What can we improve?</h2>
 				<textarea id="feedbacktext" style="width:100%; margin-top: 0" onfocus="javascript:if ($('#feedbacktext').text()==$('#feedbacktext').val()) {$('#feedbacktext').text('');}; $('#sendbutton').show()">Tell us here.</textarea>
-				<button style="margin:0; display:none" id="sendbutton" onclick="javascript:$.post('/feedback',{text: $('#feedbacktext').val()}, function(data){$('#feedbacktext').val(''); $('#improveformprompt').text('Thanks! Anything else?'); $('#feedbacktext').text('Feel free to add more, here.'); $('#sendbutton').hide()});">Send Feedback</button> 
+				<button style="margin:0; display:none" id="sendbutton" onclick="javascript:$.post('/feedback/',{text: $('#feedbacktext').val()}, function(data){$('#feedbacktext').val(''); $('#improveformprompt').text('Thanks! Anything else?'); $('#feedbacktext').text('Feel free to add more, here.'); $('#sendbutton').hide()});">Send Feedback</button> 
 			</div> 
 		</div>
 	</div>

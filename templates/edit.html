@@ -9,7 +9,7 @@
 			width: 30em;
 			font-family: sans-serif;
 		}
-		p {
+		p, label {
 			font-size: small;
 		}
 	</style>
@@ -17,9 +17,15 @@
 <body>
 	<h1>Informatics Book List: Edit</h1>
 	
+	<h2>Known Issues</h2>
+	<ul>
+		<li>Really ugly.</li>
+		<li>Not using HTTPS for authentication!</li>
+	</ul>
+	
 	<h2>Add New Book</h2>
 	<p class='help'>Search for a book you would like to add and/or comment upon. The Amazon.com books database will be used. Then, optionally, add a public comment to the book. If the book has already	been recommended, your comment will be appended, and the book will remain on the public list until you and all other editors retract their recommendation.</p>
-	<form action="/edit" method="get" accept-charset="utf-8">
+	<form action="/edit/" method="get" accept-charset="utf-8">
 		<p><input type="text" name="keywords" value="" id="keywords" style="font-size: large" />
 			<input type="submit" value="Search" style="font-size: xx-large">
 		</p>
@@ -35,7 +41,8 @@
 			<td><a href="{{ r.link }}">{{ r.title }}</a></td>
 			<td>{{ r.authors }}</td>
 			<td>
-				<form action="/addbook" method="post" accept-charset="utf-8">
+				<form action="/edit/" method="post" accept-charset="utf-8">
+					<input type="hidden" value="{{ r.gid }}" name="gid" />
 					<input type="submit" value="Add Book" />
 				</form>
 			</td>
@@ -47,7 +54,27 @@
 	{% if not recs %}
 	<p>None, yet. Add some, above.</p>
 	{% else %}
-	{{ recs }}
+		{% for rec in recs %}
+			<div class="book">
+				<div style="padding-bottom: 10px">
+					<h3 style="font-weight: bold; display: inline"><a href="{{rec.book.url}}" class="booktitle">{{ rec.book.title }}</a> by {{ rec.book.authors }}</h3>
+					<form style="display: inline" action="/edit/" method="post" accept-charset="utf-8">
+						<input type="hidden" name="action" value="delete" />
+						<input type="hidden" value="{{ rec.book.gid }}" name="gid" />
+						<input type="submit" value="Remove Recommendation" />
+					</form>
+				</div>
+				<form action="/edit/" method="post" accept-charset="utf-8">
+					<input type="hidden" name="action" value="update" />
+					<input type="hidden" value="{{ rec.book.gid }}" name="gid" />
+					<label for="blurb" style="font-weight: bold">Your Blurb</label><br />
+					<textarea rows="4" cols="30" name="blurb">{{ rec.comment|escape }}</textarea>
+					{{ cat_check_htmls.pop|safe }}
+					<input type="submit" value="Save" />
+				</form>
+			</div>
+			{% if not forloop.last %}<hr />{% endif %}
+		{% endfor %}
 	{% endif %}
 </body>
 </html>
