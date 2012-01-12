@@ -458,6 +458,8 @@ class DjangoBackend:
                     user.first_name = ldap_user.givenName.title()
                     user.last_name = ldap_user.sn.title()
                     user.email = ldap_user.mail
+                    if not user.email:
+                        user.email = username + '@uci.edu'
                 user.is_staff = webauth_user.ucinetid.lower() in [x.lower() for x in settings.ADMIN_UCINETIDS]
                 user.is_superuser = user.is_staff
                 user.save()
