@@ -459,8 +459,15 @@ class DjangoBackend:
                     user.last_name = ldap_user.sn.title()
                     user.email = ldap_user.mail
                 user.is_staff = webauth_user.ucinetid.lower() in [x.lower() for x in settings.ADMIN_UCINETIDS]
-                user.is_superuser = user.is_superuser
+                user.is_superuser = user.is_staff
                 user.save()
+            else:
+                should_be_staff = webauth_user.ucinetid.lower() in [x.lower() for x in settings.ADMIN_UCINETIDS]
+                if user.is_staff != should_be_staff:
+                    # update staff state; write to db
+                    user.is_staff = should_be_staff
+                    user.is_superuser = should_be_staff
+                    user.save()
             return user
 
         return None
